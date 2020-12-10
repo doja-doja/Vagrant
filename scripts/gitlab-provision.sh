@@ -18,3 +18,15 @@ apt-get -y install docker-ce docker-ce-cli containerd.io
 # docker community edition samt CLI installieren, containerd.io ist eine container runtime
 usermod -aG docker vagrant
 systemctl enable docker
+# nötige Verzeichnisse erstellen
+mkdir -p /srv/gitlab/{data,logs,config}
+# GitLab-CE Container erstellen
+docker run --detach \
+--hostname gitlab \
+--publish 80:80 \
+--name gitlab \
+--restart always \
+--volume /srv/gitlab/config:/etc/gitlab \
+--volume /srv/gitlab/logs:/var/log/gitlab \
+--volume /srv/gitlab/data:/var/opt/gitlab \
+gitlab/gitlab-ce:latest
